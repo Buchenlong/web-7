@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+.box>span{
+	display:block;
+	width:30px;
+	height:50px;
+	text-align:center;
+	cursor:pointer;
+	color:  ;
+	top:175px;
+	line-height:50px;
+	background:rgb(255,0,0);
+	font-size:30px;
+	position: absolute;
+	opacity:0;
+}
+#left{
+	left:30px;
+}
+#right{
+	right:30px;
+}
+.nav{
+	position:absolute;
+	left:500px;
+	bottom:20px;
+}
+.nav .active{
+	background:red;
+}
+.nav>li{
+	float:left;
+	width:20px;
+	height:20px;
+	background:#ccc ;
+	cursor:pointer;
+	margin:0 10px;
+	border-radius:50% ;
+}
+</style>
+<script src="animate.js"></script>
+</head>
+<body>
+	<div class="box" div = "box">
+		<div class="slider" div="slider">
+			<div class="slider"><img src="a15.png" alt=""></div>
+			<div class="slider"><img src="b1.png" alt=""></div>
+			<div class="slider"><img src="b2.png" alt=""></div>
+			<div class="slider"><img src="b3.png" alt=""></div>
+			<div class="slider"><img src="b4.png" alt=""></div>
+			<div class="slider"><img src="b5.png" alt=""></div>
+			<div class="slider"><img src="b6.png" alt=""></div>
+		</div>
+		<span id = "left"><</span>
+		<span id ="left">></span>
+		<ul class="nav" id="nav">
+			<li class="active"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	
+	<script>
+	var move = document.getElementById("move");
+	var str=0;
+		var intervalid = setInterval(function(){
+			move.style.marginRight = str+"%";
+			if(str>=100){
+				str=-25;
+			}
+			else{str+=0.2;}
+		},30);
+	var box = document.getElementsByClassName("box");
+	var oNavlist = document.getElementById('nav').children;
+	var slider = document.getElementById('slider');
+	var left = document.getElementById('left');
+	var right = document.getElementById('right');
+	var index = 1;
+	var timer;
+	var isMoving = false;
+	//轮播下一张的函数
+	function next(){
+		if(isMoving){
+			return;
+		}
+		isMoving = true;	
+		index++;
+		navChange();
+		animate(slider,{left:-1200*index},function(){
+			if(index == 6){
+				slider.style.left="-1200px";
+				index = 1;
+			}
+			isMoving = false;
+		});
+	}
+	function prev(){
+		if(isMoving){
+			return;
+		}
+		isMoving=true;
+		index--;
+		navChange();
+		animate(slider,{left:-1200*index},function(){
+			if(index === 0){
+				slider.style.left=-1200*5+"px";
+				index = 5;
+			}
+			isMoving = false;
+		});
+	}
+	var timer = setInterval(next,3000);
+	//鼠标划入清定时器
+	box[0].onmouseover = function(){
+		animate(left,{opacity:50});
+		animate(right,{opacity:50});
+		clearInterval(timer);
+	}
+	//鼠标划出开定时器
+	box[0].onmouseout = function(){
+		animate(left,{opacity:0});
+		animate(right,{opacity:0});
+		timer = setInterval(next,3000);
+	}
+	right.onclick = next;
+	left.onclick = prev;
+	//小按钮点击事件
+    for( var i=0;i<oNavlist.length;i++ ){
+    	oNavlist[i]. index = i;
+		oNavlist[i].onclick = function(){
+			index = this.index+1;
+			navChange();
+    		animate(slider, {left:-1200*index});
+    	}
+    }
+    //小按钮背景色切换
+    function navChange(){
+      	for( var i=0;i<oNavlist.length;i++ ){
+      			oNavlist[i].className='';
+      		}
+      		if(index===6){
+      			oNavlist[0].className = 'active';
+      		}else if(index===0){
+      			oNavlist[4].className = 'active';
+      		}
+      		else{
+      			oNavlist[index-1].className = 'active';
+      		}
+      	}
+</script>
+</body>
+</html>
